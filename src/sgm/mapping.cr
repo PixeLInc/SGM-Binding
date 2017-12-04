@@ -20,6 +20,7 @@ module SGM
     Deathrun
     Terrortown
     Teamspeak3
+    Any
 
     def self.deathrun?
       self == ServerType::Deathrun

@@ -16,7 +16,7 @@ require "sgm-binding"
 
 SGM.servers # => Array(Server)
 
-SGM.servers_by_type(SGM::ServerType::Terrortown) # => Array(Server) of ServerType Specified
+SGM.servers SGM::ServerType::Terrortown # => Array(Server) of ServerType Specified
 ```
 
 ## Contributors
