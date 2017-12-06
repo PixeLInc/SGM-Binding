@@ -38,4 +38,3 @@ module SGM
 
 end
 
-p SGM.servers
