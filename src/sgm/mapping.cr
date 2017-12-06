@@ -21,28 +21,12 @@ module SGM
     Terrortown
     Teamspeak3
     Any
-
-    def self.deathrun?
-      self == ServerType::Deathrun
-    end
-
-    def self.terrortown?
-      self == ServerType::Terrortown
-    end
-
-    def self.teamspeak?
-      self == ServerType::Teamspeak3
-    end
   end
 
   # Parse to ServerType and back to JSON
   module ServerParser
     def self.from_json(parser)
       ServerType.parse parser.read_string
-    end
-
-    def self.to_json(value : ServerType, json : JSON::Builder)
-      value.to_s
     end
   end
 

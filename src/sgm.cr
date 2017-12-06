@@ -6,21 +6,36 @@ module SGM
   # URL to server JSON
   SERVERS_URL = "https://www.seriousgmod.com/servers/json"
 
-  # Get a list of servers
-  # @param type : ServerType | Get servers by a ServerType (refer to sgm/mapping.cr#ServerType)
+  # Sends a GET to SERVERS_URL and returns the json
+  # @return String
+  def self.get_servers
+    HTTP::Client.get(SERVERS_URL).body
+  end
+
+  # Parse the json response to an Array(Server)
+  # @param json : String | The json of the server listing
+  # @param type : ServerType | The ServerType to get (refer to sgm/mapping.cr#ServerType)
   # @return Array(Server)
-  def self.servers(type : ServerType = ServerType::Any)
-    resp = HTTP::Client.get SERVERS_URL
-    parser = JSON::PullParser.new(resp.body)
+  def self.parse(json : String, type : ServerType = ServerType::Any)
+    parser = JSON::PullParser.new(json)
 
     results = [] of Server
-
-    parser.on_key("servers") { parser.read_array { results << Server.from_json(parser.read_raw) } }
+    parser.on_key("servers") { results = Array(Server).new(parser) }
 
     return results.select { |s| s.server_type == type } unless type == ServerType::Any
 
     results
   end
 
+  # Get a list of servers
+  # @param type : ServerType | Get servers by a ServerType (refer to sgm/mapping.cr#ServerType)
+  # @return Array(Server)
+  def self.servers(type : ServerType = ServerType::Any)
+    servers_json = get_servers
+
+    parse servers_json, type
+  end
+
 end
 
+p SGM.servers
